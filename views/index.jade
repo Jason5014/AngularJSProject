@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    h1 Hello Servers!
+    div(ng-repeat='todo in mainCtrl.items' class='item')
+        div
+            span(ng-bind='todo.label')
+        div - by
+            span(ng-bind='todo.author')
+    script(type='text/javascript' src='/javascripts/index.js')

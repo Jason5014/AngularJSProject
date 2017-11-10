@@ -1,0 +1,35 @@
+
+extends layout
+
+block style
+    style(rel='stylesheet').
+        ul{
+            list-style: none;
+        }
+        ul li{
+            margin: 1em;
+        }
+
+block content
+    ul
+        li Amount - {{mainCtrl.amount}}
+        li Amount - Default Currency: {{mainCtrl.amount | currency}}
+        li Amount - INR Currency: {{mainCtrl.amount | currency: '&#163'}}
+        li Amount - Number: {{mainCtrl.amount | number}}
+        li Amount - No. with 4 decimals: {{mainCtrl.amount | number:4}}
+        li Name - lowercase filter: {{mainCtrl.name | lowercase}}
+        li Name - uppercase filter: {{mainCtrl.name | uppercase}}
+        li The JSON Filter: {{mainCtrl.obj | json}}
+        li Timestamp: {{mainCtrl.startTime}}
+        li Default Date filter: {{mainCtrl.startTime | date}}
+        li Medium Date filter: {{mainCtrl.startTime | date: 'medium'}}
+        li Custom Date filter: {{mainCtrl.startTime | date: 'M/dd, yyyy'}}
+    //include form
+    script(type='text/javascript').
+        angular.module('myApp', [])
+            .controller('MainCtrl', [function(){
+                this.amount = 1024;
+                this.name = 'Shyam Seshadri';
+                this.obj = {test: 'value', num: 123};
+                this.startTime = new Date().getTime();
+            }]);

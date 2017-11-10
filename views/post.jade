@@ -1,0 +1,37 @@
+extends layout
+
+block content
+    h1 Hello Servers!
+    div(ng-repeat='todo in mainCtrl.items' class='items')
+        div
+            span(ng-bind='todo.label')
+        div - by 
+            span(ng-bind='todo.author')
+    div
+        form(name='addForm' ng-submit='mainCtrl.add()')
+            input(type='text' placeholder='label' ng-model='mainCtrl.newTodo.label' required)
+            input(type='text' placeholder='Author' ng-model='mainCtrl.newTodo.author' required)
+            input(type='submit' value='Add' ng-disabled='addForm.$invalid')
+
+    script(type='text/javascript').
+        var app = angular.module('myApp', []);
+        app.controller('MainCtrl', ['$http', function($http){
+            var self = this;
+            self.items = [];
+            self.newTodo = {};
+            var fetchTodos = function(){
+                return $http.get('/api/note').then(function(res){
+                    self.items = res.data;
+                }, function(err){
+                    console.error('Error while fetching notes');
+                })
+            }
+            fetchTodos();
+            self.add = function(){
+                $http.post('/api/note', self.newTodo)
+                    .then(fetchTodos)
+                    .then(function(res){
+                        self.newTodo = {};
+                    });
+            }
+        }]);

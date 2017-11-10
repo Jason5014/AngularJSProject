@@ -1,0 +1,40 @@
+doctype html
+html
+    heada
+        title Filters in Action
+        script(type='text/javascript' src='/lib/angular/angular.js')
+    body(ng-app='filtersApp')
+        div(ng-controller='FilterCtrl as ctrl')
+            button(ng-click='ctrl.currentFilter = "string"') Filter with String
+            button(ng-click='ctrl.currentFilter = "object"') Filter with Object
+            button(ng-click='ctrl.currentFilter = "function"') Filter with Function
+            | Filter Text
+            input(ng-model='ctrl.filterOptions["string"]')
+            | Show Done Only
+            ul
+                li(ng-repeat='note in ctrl.notes | filter:ctrl.filterOptions[ctrl.currentFilter] | orderBy: ctrl.sortOrder | limitTo: 5')
+                    {{note.label}} - {{note.type}} - {{note.done}}
+            script(type='text/javascript').
+                angular.module('filtersApp', [])
+                    .controller('FilterCtrl', [function(){
+                        this.notes = [
+                            {label: 'FC Todo', type: 'chore', done: false},
+                            {label: 'FT Todo', type: 'task', done: false},
+                            {label: 'FF Todo', type: 'fun', done: true},
+                            {label: 'SC Todo', type: 'chore', done: false},
+                            {label: 'ST Todo', type: 'fun', done: true},
+                            {label: 'SF Todo', type: 'chore', done: false},
+                            {label: 'CS Todo', type: 'task', done: true},
+                            {label: 'CF Todo', type: 'fun', done: true},
+                            {label: 'TC Todo', type: 'fun', done: false}
+                        ];
+                        this.sortOrder = ['+type', '-label'];
+                        this.filterOptions = {
+                            "string": '',
+                            "object": {done: false, label: 'C'},
+                            "function": function(note){
+                                return note.type === 'task' && note.done === false;
+                            }
+                        }
+                        this.currentFilter = 'string';
+                    }])

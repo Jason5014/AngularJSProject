@@ -1,0 +1,27 @@
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        title= title
+    body
+        - var foo = 'bar';
+        = foo
+        h1= foo
+        - var obj = {a: 'a', b: 'b', c: 'c'};
+        - for (var key in obj)
+            p= obj[key]
+        - if (foo)
+            ul
+                li yay
+                li foo
+                li worked
+        - else
+            p oh no! didn't work.
+        ul
+            - var items = ['one', 'two', 'three'];
+            each item, i in items
+                li #{item} : #{i}
+        //- 定义一个加法函数
+        mixin add(a, b)
+            h1 #{a}+#{b}=#{a+b}
+        mixin add(1, 2)

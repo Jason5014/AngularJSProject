@@ -1,0 +1,41 @@
+doctype html
+html
+    head
+        title Custom Filters in Action
+        block script
+            script(type='text/javascript' src='/lib/angular/angular.js')
+    body(ng-app='filtersApp')
+        div(ng-controller='FilterCtrl as ctrl')
+            div Start Time (Timestamp): {{ctrl.startTime}}
+            div Start Time (DateTime): {{ctrl.startTime | date: 'medium'}}
+            div Start Time (Our filter): {{ctrl.startTime | timeAgo}}
+            div someTimeAgo: {{ctrl.someTimeAgo | date:'short'}}
+            div someTimeAgo (Our filter): {{ctrl.someTimeago | timeAgo}}
+        script(type='text/javascript').
+            angular.module('filtersApp', [])
+                .controller('FilterCtrl', [function(){
+                    this.startTime = new Date().getTime();
+                    this.someTimeAgo = new Date().getTime() - (1000*60*60*4);
+                }])
+                .filter('timeAgo', [function(){
+                    var ONE_MINUTE = 1000 * 60,
+                        ONE_HOUR = ONE_MINUTE * 60,
+                        ONE_DAY = ONE_HOUR * 24,
+                        ONE_MONTH = ONE_DAY * 30;
+                    return function(ts){
+                        var currentTime = new Date().getTime(),
+                            diff = currentTime - ts;
+                        if(diff < ONE_MINUTE){
+                            return 'seconds ago';
+                        }else if(diff < ONE_HOUR){
+                            return 'minutes ago';
+                        }else if(diff < ONE_DAY){
+                            return 'hours ago';
+                        }else if(diff < ONE_MONTH){
+                            return 'days ago';
+                        }else{
+                            return 'months ago';
+                        }
+                    }
+                }]);
+

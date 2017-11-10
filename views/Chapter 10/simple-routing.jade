@@ -1,0 +1,30 @@
+doctype html
+html
+    head
+        title AngularJS Routing
+        block script
+            script(type='text/javascript' src='/lib/angular/angular.js')
+            script(type='text/javascript' src='/lib/angular-route/angular-route.js')
+    body(ng-app='routingApp')
+        h2 AngularJS Routing Application
+        ul
+            li: a(href='#/') Default Route
+            li: a(href='#/second') Second Route
+            li: a(href='#/asdasdasd') Nonexistent Route
+
+        div(ng-view)
+
+        script(type='text/javascript').
+            angular.module('routingApp', ['ngRoute'])
+                .config(['$routeProvider', function($routeProvider){
+                    $routeProvider
+                        .when('/', {
+                            template: '<h5>This is the default route</h5>'
+                        })
+                        .when('/second', {
+                            template: '<h5> This is the second route</h5>'
+                        })
+                        .otherwise({
+                            redirectTo: '/'
+                        });
+                }]);
